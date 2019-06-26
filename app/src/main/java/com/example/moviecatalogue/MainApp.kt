@@ -52,9 +52,28 @@ class MainApp : Application() {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 if (response.isSuccessful) response.body()?.let {
                     onResponse(it.movie)
-                } else response.errorBody()!!.string().let {
-                    toast(it)
-                }
+                } else toast(response.errorBody()!!.string())
+            }
+
+        })
+    }
+
+    fun getDetailsMovie(
+        movieId: Int,
+        language: String = LANGUAGE,
+        onResponse: (MovieDetails) -> Unit
+    ) {
+        val call = services.getDetailsMovie(movieId, API_KEY,language)
+
+        call.enqueue(object : Callback<MovieDetails>{
+            override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
+                logD(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
+                if(response.isSuccessful) response.body()?.let {
+                    onResponse(it)
+                }else toast(response.errorBody()!!.string())
             }
 
         })

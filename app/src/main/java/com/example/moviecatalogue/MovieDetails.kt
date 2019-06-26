@@ -17,8 +17,6 @@ data class MovieDetails(
     val homepage: Any,
     @SerializedName("id")
     val id: Int,
-    @SerializedName("imdb_id")
-    val imdbId: String,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("original_title")
@@ -43,8 +41,6 @@ data class MovieDetails(
     val spokenLanguages: List<SpokenLanguage>,
     @SerializedName("status")
     val status: String,
-    @SerializedName("tagline")
-    val tagline: String,
     @SerializedName("title")
     val title: String,
     @SerializedName("video")

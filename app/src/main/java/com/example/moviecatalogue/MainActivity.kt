@@ -10,8 +10,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val main = MainApp()
-    var mutableList = mutableListOf<Movie>()
-    lateinit var mainAdapter : MainAdapter
+    private var mutableList = mutableListOf<Movie>()
+    private lateinit var mainAdapter : MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

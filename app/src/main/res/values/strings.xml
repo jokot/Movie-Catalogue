@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Movie Catalogue</string>
+    <string name="overview">Overview</string>
+    <string name="more_information">More information</string>
+    <string name="genre">Genre:</string>
+    <string name="production_companies">Production companies</string>
+    <string name="spoken_languages">Spoken languages</string>
+    <string name="production_countries">Production countries</string>
+    <string name="budget">Budget</string>
 </resources>

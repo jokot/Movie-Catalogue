@@ -2,21 +2,18 @@ package com.example.moviecatalogue
 
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
-import kotlin.coroutines.coroutineContext
 
 class MainAdapter(
-    var mutableList: MutableList<Movie>,
-    var listener: (Movie) -> Unit
+    private var mutableList: MutableList<Movie>,
+    private var listener: (Movie) -> Unit
 ) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
-    override fun onCreateViewHolder(group: ViewGroup, viewType: Int): MainAdapter.MainViewHolder {
+    override fun onCreateViewHolder(group: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             LayoutInflater.from(group.context).inflate(R.layout.item_movie, group, false)
         )
@@ -26,7 +23,7 @@ class MainAdapter(
         return mutableList.size
     }
 
-    override fun onBindViewHolder(holder: MainAdapter.MainViewHolder, potition: Int) {
+    override fun onBindViewHolder(holder: MainViewHolder, potition: Int) {
         holder.bindItem(mutableList[potition], listener)
     }
 
