@@ -1,23 +1,22 @@
 package com.example.moviecatalogue
 
-import android.annotation.SuppressLint
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_detail_movie.*
+import kotlinx.android.synthetic.main.activity_details_tv_show.*
 
-class DetailMovieActivity : AppCompatActivity() {
+class DetailsTvShowActivity : AppCompatActivity() {
 
     private val main = MainApp()
 
-    private lateinit var movie: Movie
+    private lateinit var tvShow: TvShow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail_movie)
+        setContentView(R.layout.activity_details_tv_show)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -35,15 +34,18 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun setUpLayout() {
-        movie = intent.getParcelableExtra(MainApp.MOVIE)
-        getMovieDetails(movie.id)
-        text_tittle.text = movie.title
-        val date = movie.releaseDate
+
+//        if (intent.getStringExtra(MainApp.M_OR_T).toString() != "null") {
+        tvShow = intent.getParcelableExtra(MainApp.TV_SHOW)
+        getTvShowDetails(tvShow.id)
+
+        text_tittle.text = tvShow.name
+        val date = tvShow.firstAirDate
         val year = date?.substring(0, 4)
         text_year.text = year
-        text_overview_detail.text = movie.overview
-        text_rating.text = movie.voteAverage.toString()
-        when (movie.voteAverage) {
+        text_overview_detail.text = tvShow.overview
+        text_rating.text = tvShow.voteAverage.toString()
+        when (tvShow.voteAverage) {
             in 0..3 -> text_rating.setTextColor(ContextCompat.getColor(this, R.color.colorRed))
             in 4..6 -> text_rating.setTextColor(
                 ContextCompat.getColor(
@@ -58,19 +60,16 @@ class DetailMovieActivity : AppCompatActivity() {
                 )
             )
         }
-        Picasso.get().load("${MainApp.IMAGE_BASE_URL}${movie.posterPath}")
+        Picasso.get().load("${MainApp.IMAGE_BASE_URL}${tvShow.posterPath}")
             .placeholder(R.drawable.ic_backgroud_placeholder).into(image_detail)
 
 
     }
 
+    private fun getTvShowDetails(tvId: Int) {
+        main.getDetailTvShow(tvId, {
 
-    @SuppressLint("SetTextI18n")
-    private fun getMovieDetails(movieId: Int) {
-        main.getDetailsMovie(movieId, {
-            text_budget.text = "$" + "${it.budget}"
-
-//            genre
+            //            genre
             val listGenre = it.genres
             var genre = ""
             for (i in listGenre) {
@@ -80,12 +79,10 @@ class DetailMovieActivity : AppCompatActivity() {
 
 
 //            spoken language
-            val listSpokenLanguage = it.spokenLanguages
-            var spokenLanguage = ""
-            for (i in listSpokenLanguage) {
-                spokenLanguage += i.name + ", "
-            }
-            text_languages.text = spokenLanguage.dropLast(2)
+            text_languages.text = it.languages.toString()
+                .replace("[", "")
+                .replace("]", "")
+                .replace("\"","")
 
 
 //            production companies
@@ -96,20 +93,11 @@ class DetailMovieActivity : AppCompatActivity() {
             }
             text_production_companies.text = productionCompanies.dropLast(2)
 
-
-//            production countries
-            val listProductionCountries = it.productionCountries
-            var productionCountries = ""
-            for (i in listProductionCountries) {
-                productionCountries += i.name + ", "
-            }
-            text_production_countries.text = productionCountries.dropLast(2)
-
             if(pb_detail !=null){
                 pb_detail.visibility = View.GONE
             }
-        }, {
-            toast(this, it)
+        },{
+            toast(this,it)
         })
     }
 }

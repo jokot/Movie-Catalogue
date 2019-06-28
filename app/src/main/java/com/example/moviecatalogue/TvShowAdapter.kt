@@ -9,10 +9,10 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MainAdapter(
-    private var mutableList: MutableList<Movie>,
-    private var listener: (Movie) -> Unit
-) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class TvShowAdapter(
+    private var mutableList: MutableList<TvShow>,
+    private var listener: (TvShow) -> Unit
+) : RecyclerView.Adapter<TvShowAdapter.MainViewHolder>() {
     override fun onCreateViewHolder(group: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             LayoutInflater.from(group.context).inflate(R.layout.item_movie, group, false)
@@ -28,9 +28,9 @@ class MainAdapter(
     }
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindItem(item: Movie, listener: (Movie) -> Unit) {
-            itemView.text_tittle.text = item.title
-            itemView.text_date.text = item.releaseDate
+        fun bindItem(item: TvShow, listener: (TvShow) -> Unit) {
+            itemView.text_tittle.text = item.name
+            itemView.text_date.text = item.firstAirDate
             itemView.text_description.text = item.overview
             itemView.text_rating.text = item.voteAverage.toString()
             when (item.voteAverage) {

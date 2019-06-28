@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalog Film</string>
+    <string name="overview">Ikhtisar</string>
+    <string name="more_information">Informasi lebih lanjut</string>
+    <string name="genre">Aliran:</string>
+    <string name="production_companies">Perusahaan produksi</string>
+    <string name="spoken_languages">Bahasa lisan</string>
+    <string name="production_countries">Negara produksi</string>
+    <string name="budget">Anggaran</string>
+    <string name="title_activity_bottom_navigation">AktivitasNavigasiBawah</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_dashboard">Dasbor</string>
+    <string name="title_notifications">Notifikasi</string>
+    <string name="movie">Film</string>
+    <string name="tv_show">Acara TV</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Halo fragmen kosong</string>
+    <string name="change_language_settings">Pengaturan bahasa</string>
+</resources>
