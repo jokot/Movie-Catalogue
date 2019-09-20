@@ -67,7 +67,7 @@ class DetailMovieActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun getMovieDetails(movieId: Int) {
-        main.getDetailsMovie(movieId, {
+        main.getDetailsMovie(movieId,this, {
             text_budget.text = "$" + "${it.budget}"
 
 //            genre

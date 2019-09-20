@@ -67,7 +67,7 @@ class DetailsTvShowActivity : AppCompatActivity() {
     }
 
     private fun getTvShowDetails(tvId: Int) {
-        main.getDetailTvShow(tvId, {
+        main.getDetailTvShow(tvId, this,{
 
             //            genre
             val listGenre = it.genres

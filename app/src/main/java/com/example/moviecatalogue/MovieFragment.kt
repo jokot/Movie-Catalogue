@@ -27,14 +27,39 @@ class MovieFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initRecycler()
-        getMovie()
+//        if (main.getStringSharePref(MainApp.SAVE_INSTANCE_LIST_MOVIE,activity!!) == ""){
+//            main.putStringSharePref(MainApp.SAVE_INSTANCE_LIST_MOVIE,MainApp.SAVE_INSTANCE_LIST_MOVIE,activity!!)
+//            initRecycler(mutableList)
+//            getMovie()
+//        }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+//        if(savedInstanceState != null){
+//            val savedMutableList = savedInstanceState.getParcelableArrayList<Movie>(MainApp.SAVE_INSTANCE_LIST_MOVIE).toMutableList()
+//            mutableList.clear()
+//            mutableList.addAll(savedMutableList)
+//
+//            initRecycler(savedMutableList)
+//            movieAdapter.notifyDataSetChanged()
+//        }else{
+//            main.putStringSharePref(MainApp.SAVE_INSTANCE_LIST_MOVIE,MainApp.SAVE_INSTANCE_LIST_MOVIE,activity!!)
+            initRecycler(mutableList)
+            getMovie()
+//        }
     }
 
     private fun getMovie() {
         mutableList.clear()
-        main.getMovie({
+
+        if (pb_main != null) {
+            pb_main.visibility = View.VISIBLE
+        }
+
+        main.getMovie(activity!!,{
             if (pb_main != null) {
                 pb_main.visibility = View.GONE
             }
@@ -45,9 +70,14 @@ class MovieFragment : Fragment() {
         })
     }
 
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putParcelableArrayList(MainApp.SAVE_INSTANCE_LIST_MOVIE,ArrayList(mutableList))
+////        main.putStringSharePref(MainApp.SAVE_INSTANCE_LIST_MOVIE,MainApp.SAVE_INSTANCE_LIST_MOVIE,activity!!)
+//    }
 
-    private fun initRecycler() {
-        movieAdapter = MovieAdapter(mutableList) {
+    private fun initRecycler(list:MutableList<Movie>) {
+        movieAdapter = MovieAdapter(list) {
             val intent = Intent(context, DetailMovieActivity::class.java)
             intent.putExtra(MainApp.MOVIE, it)
             intent.putExtra(MainApp.M_OR_T, MainApp.MOVIE)

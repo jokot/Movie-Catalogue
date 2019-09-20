@@ -39,15 +39,37 @@ class BottomNavigationActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+//    override fun onSaveInstanceState(outState: Bundle?) {
+//        super.onSaveInstanceState(outState)
+//        if(supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG) !=null){
+//            supportFragmentManager.putFragment(
+//                outState!!,MainApp.SAVE_INSTANCE_FRAGMENT,
+//                supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG)!!)
+//        }else{
+//            supportFragmentManager.putFragment(
+//                outState!!,MainApp.SAVE_INSTANCE_FRAGMENT,
+//                supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG)!!)
+//        }
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom_navigation)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+//        if(savedInstanceState != null){
+//            if(supportFragmentManager.getFragment(savedInstanceState, MainApp.FRAGMENT_MOVIE_TAG) != null){
+//                val mContent = supportFragmentManager.getFragment(savedInstanceState, MainApp.FRAGMENT_MOVIE_TAG)
+//                changeFragment(mContent!!,MainApp.FRAGMENT_MOVIE_TAG)
+//            }else{
+//                val mContent = supportFragmentManager.getFragment(savedInstanceState, MainApp.FRAGMENT_TV_TAG)
+//                changeFragment(mContent!!,MainApp.FRAGMENT_TV_TAG)
+//            }
+//        }else{
+            initFragment()
+//        }
 
-//        textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
-        initFragment()
     }
 
     private fun initFragment() {
