@@ -22,7 +22,7 @@ class MainApp : Application() {
         const val CATEGORY = "popular"
         const val PAGE = 1
         const val LOG_D = "LOG_D"
-        const val MOVIE = "tvShow"
+        const val MOVIE = "movie"
         const val M_OR_T = "mort"
         const val TV_SHOW = "tv_show"
         const val FRAGMENT_MOVIE_TAG = "fragment movie tag"
@@ -32,19 +32,19 @@ class MainApp : Application() {
         const val SAVE_INSTANCE_LIST_TV = "save instance list list"
         const val SAVE_INSTANCE_FRAGMENT = "save instance fragment"
         const val SHARE_PREF = "share pref"
+
+        val gson: Gson = GsonBuilder().setLenient().create()
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+        val services: ApiServices = retrofit.create(ApiServices::class.java)
     }
 
-    private val
-            gson: Gson = GsonBuilder().setLenient().create()
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()
-    private val services: ApiServices = retrofit.create(ApiServices::class.java)
 
     fun getMovie(
         activity: Activity,
-        onResponse: (List<Movie>) -> Unit,
+        onResponse: (MutableList<Movie>) -> Unit,
         onError: (String) -> Unit,
         category: String = CATEGORY,
         page: Int = PAGE
@@ -97,7 +97,7 @@ class MainApp : Application() {
     }
 
     fun getTvShow(
-        activity : Activity,
+        activity: Activity,
         onResponse: (List<TvShow>) -> Unit,
         onError: (String) -> Unit,
         category: String = CATEGORY,
@@ -145,14 +145,14 @@ class MainApp : Application() {
         })
     }
 
-    fun putStringSharePref(key: String,value:String,activity: Activity){
+    fun putStringSharePref(key: String, value: String, activity: Activity) {
         val editor = activity.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE).edit()
-        editor.putString(key,value)
+        editor.putString(key, value)
         editor.apply()
     }
 
-    fun getStringSharePref(key: String,activity: Activity):String{
+    fun getStringSharePref(key: String, activity: Activity): String {
         val sharePref = activity.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE)
-        return sharePref.getString(key,"")!!
+        return sharePref.getString(key, "")!!
     }
 }

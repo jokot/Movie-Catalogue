@@ -13,6 +13,14 @@ class TvShowAdapter(
     private var mutableList: MutableList<TvShow>,
     private var listener: (TvShow) -> Unit
 ) : RecyclerView.Adapter<TvShowAdapter.MainViewHolder>() {
+
+    fun setData(items: MutableList<TvShow>){
+        mutableList.clear()
+        mutableList.addAll(items)
+        notifyDataSetChanged()
+    }
+
+
     override fun onCreateViewHolder(group: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             LayoutInflater.from(group.context).inflate(R.layout.item_movie, group, false)

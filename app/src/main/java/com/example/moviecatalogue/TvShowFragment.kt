@@ -1,6 +1,8 @@
 package com.example.moviecatalogue
 
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_tv_show.*
 
 
@@ -17,6 +18,7 @@ class TvShowFragment : Fragment() {
     private val main = MainApp()
     private var mutableList = mutableListOf<TvShow>()
     private lateinit var tvAdapter: TvShowAdapter
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,52 +28,36 @@ class TvShowFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_tv_show, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        if(savedInstanceState == null){
-            initRecycler(mutableList)
-            getTvShow()
-//        }
-        super.onViewCreated(view, savedInstanceState)
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(MainApp.TV_SHOW, true)
+
     }
-
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putParcelableArrayList(MainApp.SAVE_INSTANCE_LIST_TV,ArrayList(mutableList))
-//
-//    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initRecycler(mutableList)
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        mainViewModel.getTvShow().observe(this, getTvShow)
 
-//        if(savedInstanceState != null){
-//            val savedMutableList = savedInstanceState.getParcelableArrayList<TvShow>(MainApp.SAVE_INSTANCE_LIST_TV).toMutableList()
-//            mutableList.clear()
-//            mutableList.addAll(savedMutableList)
-//
-//            initRecycler(savedMutableList)
-//            tvAdapter.notifyDataSetChanged()
-//        }
-    }
-
-    private fun getTvShow() {
-        mutableList.clear()
-
-        if (pb_main != null) {
-            pb_main.visibility = View.VISIBLE
-        }
-        main.getTvShow(activity!!,{
-            if (pb_main != null) {
-                pb_main.visibility = View.GONE
+        if (savedInstanceState?.getBoolean(MainApp.TV_SHOW) != true) {
+            showLoading(true)
+            mainViewModel.setTvShow(activity!!) {
+                showLoading(false)
+                toast(activity!!, it)
             }
-            mutableList.addAll(it)
-            tvAdapter.notifyDataSetChanged()
-        }, {
-            toast(activity!!, it)
-        })
+        }
     }
 
-    private fun initRecycler(list:MutableList<TvShow>) {
+    private val getTvShow = Observer<MutableList<TvShow>> {
+        if (it != null) {
+            tvAdapter.setData(it)
+            showLoading(false)
+        }
+    }
+
+    private fun initRecycler(list: MutableList<TvShow>) {
         tvAdapter = TvShowAdapter(list) {
             val intent = Intent(context, DetailsTvShowActivity::class.java)
             intent.putExtra(MainApp.TV_SHOW, it)
@@ -80,4 +66,13 @@ class TvShowFragment : Fragment() {
         rv_main.adapter = tvAdapter
         rv_main.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            pb_main.visibility = View.VISIBLE
+        } else {
+            pb_main.visibility = View.GONE
+        }
+    }
+
 }

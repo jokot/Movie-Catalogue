@@ -13,11 +13,19 @@ class MovieAdapter(
     private var mutableList: MutableList<Movie>,
     private var listener: (Movie) -> Unit
 ) : RecyclerView.Adapter<MovieAdapter.MainViewHolder>() {
+
+    fun setData(items: MutableList<Movie>){
+        mutableList.clear()
+        mutableList.addAll(items)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(group: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             LayoutInflater.from(group.context).inflate(R.layout.item_movie, group, false)
         )
     }
+
 
     override fun getItemCount(): Int {
         return mutableList.size

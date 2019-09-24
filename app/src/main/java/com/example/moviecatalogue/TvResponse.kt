@@ -9,7 +9,7 @@ data class TvResponse(
     @SerializedName("page")
     var page: Int,
     @SerializedName("results")
-    var tvShow: List<TvShow>,
+    var tvShow: MutableList<TvShow>,
     @SerializedName("total_pages")
     var totalPages: Int,
     @SerializedName("total_results")
