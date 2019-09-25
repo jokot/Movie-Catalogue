@@ -43,9 +43,9 @@ class TvShowFragment : Fragment() {
 
         if (savedInstanceState?.getBoolean(MainApp.TV_SHOW) != true) {
             showLoading(true)
-            mainViewModel.setTvShow(activity!!) {
+            mainViewModel.setTvShow(requireActivity()) {
                 showLoading(false)
-                toast(activity!!, it)
+                toast(requireActivity(), it)
             }
         }
     }

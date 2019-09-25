@@ -38,9 +38,9 @@ class MovieFragment : Fragment() {
 
         if (savedInstanceState?.getBoolean(MainApp.MOVIE) != true){
             showLoading(true)
-            mainViewModel.setMovie(activity!!) {
+            mainViewModel.setMovie(requireActivity()) {
                 showLoading(false)
-                toast(activity!!, it)
+                toast(requireActivity(), it)
             }
         }
     }
