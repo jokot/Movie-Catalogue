@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import com.example.moviecatalogue.api.ApiServices
+import com.example.moviecatalogue.ext.logD
+import com.example.moviecatalogue.model.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Call
@@ -27,6 +30,7 @@ class MainApp : Application() {
         const val TV_SHOW = "tv_show"
         const val FRAGMENT_MOVIE_TAG = "fragment movie tag"
         const val FRAGMENT_TV_TAG = "fragment tv tag"
+        const val FRAGMENT_FAVORITE_TAG = "fragment favorite tag"
         const val CHANGE_LANGUAGE_CODE = 123
         const val SAVE_INSTANCE_LIST_MOVIE = "save instance list movie"
         const val SAVE_INSTANCE_LIST_TV = "save instance list list"

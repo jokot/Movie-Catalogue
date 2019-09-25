@@ -7,7 +7,7 @@
     <color name="colorPrimaryDark">#181818</color>
     <!--<color name="colorPrimaryDark">#000000</color>-->
     <color name="colorAccent">#FFE92E1E</color>
-    <!--<color name="colorWhite">#FFFFFF</color>-->
+    <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGray">#FF969696</color>
     <color name="colorGreen">#4CAF50</color>

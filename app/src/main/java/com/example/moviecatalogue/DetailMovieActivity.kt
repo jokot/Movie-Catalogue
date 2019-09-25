@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.example.moviecatalogue.ext.toast
+import com.example.moviecatalogue.model.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 
@@ -14,11 +17,13 @@ class DetailMovieActivity : AppCompatActivity() {
     private val main = MainApp()
 
     private lateinit var movie: Movie
+    private var isFavorite = false
+    private var menuItem: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
-        supportActionBar?.run{
+        supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
@@ -26,17 +31,39 @@ class DetailMovieActivity : AppCompatActivity() {
         setUpLayout()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.favorite_menu, menu)
+        menuItem = menu
+        setFavorite()
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-                return true
+                true
+            }
+            R.id.favorite -> {
+                if (isFavorite) removeFavorite() else addFavorite()
+                isFavorite = !isFavorite
+                setFavorite()
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun addFavorite() {
+        "Add Favorite".toast(this)
+    }
+
+    private fun removeFavorite() {
+        "Remove Favorite".toast(this)
+    }
+
     private fun setUpLayout() {
+        supportActionBar?.setTitle(R.string.movie)
         movie = intent.getParcelableExtra(MainApp.MOVIE)
         getMovieDetails(movie.id)
         text_tittle.text = movie.title
@@ -66,10 +93,9 @@ class DetailMovieActivity : AppCompatActivity() {
 
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun getMovieDetails(movieId: Int) {
-        main.getDetailsMovie(movieId,this, {
+        main.getDetailsMovie(movieId, this, {
             text_budget.text = "$" + "${it.budget}"
 
 //            genre
@@ -107,11 +133,19 @@ class DetailMovieActivity : AppCompatActivity() {
             }
             text_production_countries.text = productionCountries.dropLast(2)
 
-            if(pb_detail !=null){
+            if (pb_detail != null) {
                 pb_detail.visibility = View.GONE
             }
         }, {
             toast(this, it)
         })
+    }
+
+    private fun setFavorite() {
+        if (isFavorite) {
+            menuItem?.getItem(0)?.setIcon(R.drawable.ic_favorite_white_24dp)
+        } else {
+            menuItem?.getItem(0)?.setIcon(R.drawable.ic_favorite_border_white_24dp)
+        }
     }
 }

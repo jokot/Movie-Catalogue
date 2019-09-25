@@ -1,4 +1,4 @@
-package com.example.moviecatalogue
+package com.example.moviecatalogue.model
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -58,7 +58,8 @@ data class Movie(
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<Movie> = object : Parcelable.Creator<Movie> {
-            override fun createFromParcel(source: Parcel): Movie = Movie(source)
+            override fun createFromParcel(source: Parcel): Movie =
+                Movie(source)
             override fun newArray(size: Int): Array<Movie?> = arrayOfNulls(size)
         }
     }

@@ -1,6 +1,10 @@
-package com.example.moviecatalogue
+package com.example.moviecatalogue.api
 
 
+import com.example.moviecatalogue.model.MovieDetails
+import com.example.moviecatalogue.model.TvDetails
+import com.example.moviecatalogue.model.MovieResponse
+import com.example.moviecatalogue.model.TvResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

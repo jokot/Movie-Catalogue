@@ -4,6 +4,8 @@ import android.app.Activity
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.example.moviecatalogue.model.Movie
+import com.example.moviecatalogue.model.TvShow
 
 class MainViewModel : ViewModel() {
     val main = MainApp()

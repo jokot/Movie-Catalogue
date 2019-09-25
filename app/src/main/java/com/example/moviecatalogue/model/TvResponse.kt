@@ -1,4 +1,4 @@
-package com.example.moviecatalogue
+package com.example.moviecatalogue.model
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -82,7 +82,8 @@ data class TvShow(
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<TvShow> = object : Parcelable.Creator<TvShow> {
-            override fun createFromParcel(source: Parcel): TvShow = TvShow(source)
+            override fun createFromParcel(source: Parcel): TvShow =
+                TvShow(source)
             override fun newArray(size: Int): Array<TvShow?> = arrayOfNulls(size)
         }
     }

@@ -3,16 +3,21 @@ package com.example.moviecatalogue
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.example.moviecatalogue.ext.toast
+import com.example.moviecatalogue.model.TvShow
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_details_tv_show.*
 
-class DetailsTvShowActivity : AppCompatActivity() {
+class DetailTvShowActivity : AppCompatActivity() {
 
     private val main = MainApp()
 
     private lateinit var tvShow: TvShow
+    private var isFavorite = false
+    private var menuItem : Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +30,41 @@ class DetailsTvShowActivity : AppCompatActivity() {
         setUpLayout()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.favorite_menu,menu)
+        menuItem = menu
+        setFavorite()
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-                return true
+                true
             }
+            R.id.favorite ->{
+                if(isFavorite) removeFavorite() else addFavorite()
+
+                isFavorite = !isFavorite
+
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun addFavorite(){
+        "Add Favorite".toast(this)
+    }
+
+    private fun removeFavorite(){
+        "Remove Favorite".toast(this)
+    }
+
     private fun setUpLayout() {
+        supportActionBar?.setTitle(R.string.tv_show)
 
 //        if (intent.getStringExtra(MainApp.M_OR_T).toString() != "null") {
         tvShow = intent.getParcelableExtra(MainApp.TV_SHOW)
@@ -99,7 +128,15 @@ class DetailsTvShowActivity : AppCompatActivity() {
                 pb_detail.visibility = View.GONE
             }
         },{
-            toast(this,it)
+            toast(this, it)
         })
+    }
+
+    private fun setFavorite(){
+        if(isFavorite){
+            menuItem?.getItem(0)?.setIcon(R.drawable.ic_favorite_white_24dp)
+        }else{
+            menuItem?.getItem(0)?.setIcon(R.drawable.ic_favorite_border_white_24dp)
+        }
     }
 }

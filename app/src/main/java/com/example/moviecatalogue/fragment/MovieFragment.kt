@@ -1,4 +1,4 @@
-package com.example.moviecatalogue
+package com.example.moviecatalogue.fragment
 
 
 import android.arch.lifecycle.Observer
@@ -10,14 +10,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_tv_show.*
+import com.example.moviecatalogue.*
+import com.example.moviecatalogue.adapter.MovieAdapter
+import com.example.moviecatalogue.ext.toast
+import com.example.moviecatalogue.model.Movie
+import kotlinx.android.synthetic.main.fragment_movie.*
 
 
-class TvShowFragment : Fragment() {
+class MovieFragment : Fragment() {
 
     private val main = MainApp()
-    private var mutableList = mutableListOf<TvShow>()
-    private lateinit var tvAdapter: TvShowAdapter
+    private var mutableList = mutableListOf<Movie>()
+    private lateinit var movieAdapter: MovieAdapter
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreateView(
@@ -25,46 +29,52 @@ class TvShowFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tv_show, container, false)
-    }
-
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(MainApp.TV_SHOW, true)
-
+        return inflater.inflate(R.layout.fragment_movie, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initRecycler(mutableList)
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        mainViewModel.getTvShow().observe(this, getTvShow)
 
-        if (savedInstanceState?.getBoolean(MainApp.TV_SHOW) != true) {
+        initRecycler(mutableList)
+
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        mainViewModel.getMovie().observe(this, getMovie)
+
+        if (savedInstanceState?.getBoolean(MainApp.MOVIE) != true){
             showLoading(true)
-            mainViewModel.setTvShow(requireActivity()) {
+            mainViewModel.setMovie(requireActivity()) {
                 showLoading(false)
                 toast(requireActivity(), it)
             }
         }
     }
 
-    private val getTvShow = Observer<MutableList<TvShow>> {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(MainApp.MOVIE,true)
+    }
+
+    private val getMovie = Observer<MutableList<Movie>> {
         if (it != null) {
-            tvAdapter.setData(it)
+            movieAdapter.setData(it)
             showLoading(false)
         }
     }
 
-    private fun initRecycler(list: MutableList<TvShow>) {
-        tvAdapter = TvShowAdapter(list) {
-            val intent = Intent(context, DetailsTvShowActivity::class.java)
-            intent.putExtra(MainApp.TV_SHOW, it)
+    private fun initRecycler(list: MutableList<Movie>) {
+        movieAdapter = MovieAdapter(list) {
+            val intent = Intent(context, DetailMovieActivity::class.java)
+            intent.putExtra(MainApp.MOVIE, it)
+            intent.putExtra(
+                MainApp.M_OR_T,
+                MainApp.MOVIE
+            )
             startActivity(intent)
         }
-        rv_main.adapter = tvAdapter
+        movieAdapter.notifyDataSetChanged()
+        rv_main.adapter = movieAdapter
         rv_main.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
     }
 
     private fun showLoading(state: Boolean) {
@@ -74,5 +84,4 @@ class TvShowFragment : Fragment() {
             pb_main.visibility = View.GONE
         }
     }
-
 }
