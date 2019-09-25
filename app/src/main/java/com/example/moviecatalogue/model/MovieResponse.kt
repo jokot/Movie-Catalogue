@@ -62,5 +62,15 @@ data class Movie(
                 Movie(source)
             override fun newArray(size: Int): Array<Movie?> = arrayOfNulls(size)
         }
+
+        const val TABLE_FAVORITE_MOVIE: String = "TABLE_FAVORITE_MOVIE"
+        const val BACKDROP_PATH: String = "BACKDROP_PATH"
+        const val ID: String = "ID_"
+        const val MOVIE_ID: String = "MOVIE_ID"
+        const val OVERVIEW: String = "OVERVIEW"
+        const val POSTER_PATH: String = "POSTER_PATH"
+        const val RELEAS_DATE: String = "RELEAS_DATE"
+        const val TITLE: String = "TITLE"
+        const val VOTE_VARAGE: String = "VOTE_VARAGE"
     }
 }

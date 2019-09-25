@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.fragment.MovieFavoriteFragment
+import com.example.moviecatalogue.fragment.TvShowFavoriteFragment
 
 class TabAdapter(fm: FragmentManager, private val numOfTabs: Int, private val context: Context) :
     FragmentPagerAdapter(fm) {
@@ -14,7 +15,7 @@ class TabAdapter(fm: FragmentManager, private val numOfTabs: Int, private val co
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> MovieFavoriteFragment()
-            else -> MovieFavoriteFragment()
+            else -> TvShowFavoriteFragment()
         }
     }
 

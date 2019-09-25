@@ -1,15 +1,22 @@
 package com.example.moviecatalogue
 
-import android.support.v7.app.AppCompatActivity
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.example.moviecatalogue.database.database
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.TvShow
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_details_tv_show.*
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.delete
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
+import java.sql.SQLClientInfoException
 
 class DetailTvShowActivity : AppCompatActivity() {
 
@@ -17,21 +24,21 @@ class DetailTvShowActivity : AppCompatActivity() {
 
     private lateinit var tvShow: TvShow
     private var isFavorite = false
-    private var menuItem : Menu? = null
+    private var menuItem: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_tv_show)
-        supportActionBar?.run{
+        supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-
         setUpLayout()
+        favoriteState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.favorite_menu,menu)
+        menuInflater.inflate(R.menu.favorite_menu, menu)
         menuItem = menu
         setFavorite()
         return super.onCreateOptionsMenu(menu)
@@ -43,10 +50,11 @@ class DetailTvShowActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
-            R.id.favorite ->{
-                if(isFavorite) removeFavorite() else addFavorite()
+            R.id.favorite -> {
+                if (isFavorite) removeFavorite() else addFavorite()
 
                 isFavorite = !isFavorite
+                setFavorite()
 
                 true
             }
@@ -55,12 +63,58 @@ class DetailTvShowActivity : AppCompatActivity() {
         }
     }
 
-    private fun addFavorite(){
-        "Add Favorite".toast(this)
+    private fun favoriteState() {
+        database.use {
+            val result = select(TvShow.TABLE_FAVORITE_TV_SHOW)
+                .whereArgs(
+                    "(${TvShow.TV_SHOW_ID} = {id})",
+                    "id" to tvShow.id
+                )
+            val favorite = result.parseList(classParser<TvShow>())
+            if (favorite.isNotEmpty()) isFavorite = true
+
+            setFavorite()
+        }
     }
 
-    private fun removeFavorite(){
-        "Remove Favorite".toast(this)
+    private fun addFavorite() {
+        try {
+            database.use {
+                insert(
+                    TvShow.TABLE_FAVORITE_TV_SHOW,
+                    TvShow.BACKDROP_PATH to tvShow.backdropPath,
+                    TvShow.FIRST_AIR_DATE to tvShow.firstAirDate,
+                    TvShow.TV_SHOW_ID to tvShow.id,
+                    TvShow.NAME to tvShow.name,
+                    TvShow.ORIGINAL_LANGUAGE to tvShow.originalLanguage,
+                    TvShow.ORIGINAL_NAME to tvShow.originalName,
+                    TvShow.OVERVIEW to tvShow.overview,
+                    TvShow.POPULARITY to tvShow.popularity,
+                    TvShow.POSTER_PATH to tvShow.posterPath,
+                    TvShow.VOTE_AVERAGE to tvShow.voteAverage,
+                    TvShow.VOTE_COUNT to tvShow.voteCount
+                )
+            }
+            "Added Favorite".toast(this)
+        } catch (e: SQLClientInfoException) {
+            e.localizedMessage.toast(this)
+        }
+    }
+
+    private fun removeFavorite() {
+        try {
+            database.use {
+                delete(
+                    TvShow.TABLE_FAVORITE_TV_SHOW,
+                    "(${TvShow.TV_SHOW_ID} = {id})",
+                    "id" to tvShow.id
+                )
+            }
+            "Remove Favorite".toast(this)
+        } catch (e: SQLiteConstraintException) {
+            e.localizedMessage.toast(this)
+        }
+
     }
 
     private fun setUpLayout() {
@@ -98,7 +152,7 @@ class DetailTvShowActivity : AppCompatActivity() {
     }
 
     private fun getTvShowDetails(tvId: Int) {
-        main.getDetailTvShow(tvId, this,{
+        main.getDetailTvShow(tvId, this, {
 
             //            genre
             val listGenre = it.genres
@@ -113,7 +167,7 @@ class DetailTvShowActivity : AppCompatActivity() {
             text_languages.text = it.languages.toString()
                 .replace("[", "")
                 .replace("]", "")
-                .replace("\"","")
+                .replace("\"", "")
 
 
 //            production companies
@@ -124,18 +178,18 @@ class DetailTvShowActivity : AppCompatActivity() {
             }
             text_production_companies.text = productionCompanies.dropLast(2)
 
-            if(pb_detail !=null){
+            if (pb_detail != null) {
                 pb_detail.visibility = View.GONE
             }
-        },{
+        }, {
             toast(this, it)
         })
     }
 
-    private fun setFavorite(){
-        if(isFavorite){
+    private fun setFavorite() {
+        if (isFavorite) {
             menuItem?.getItem(0)?.setIcon(R.drawable.ic_favorite_white_24dp)
-        }else{
+        } else {
             menuItem?.getItem(0)?.setIcon(R.drawable.ic_favorite_border_white_24dp)
         }
     }
