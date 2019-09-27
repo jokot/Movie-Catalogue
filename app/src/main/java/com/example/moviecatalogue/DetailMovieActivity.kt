@@ -90,7 +90,7 @@ class DetailMovieActivity : AppCompatActivity() {
                     Movie.VOTE_VARAGE to movie.voteAverage
                 )
             }
-            "Added Favorite".toast(this)
+            getString(R.string.add_favorite).toast(this)
         } catch (e: SQLClientInfoException) {
             e.localizedMessage.toast(this)
         }
@@ -101,7 +101,7 @@ class DetailMovieActivity : AppCompatActivity() {
             database.use {
                 delete(Movie.TABLE_FAVORITE_MOVIE, "(MOVIE_ID = {id})", "id" to movie.id)
             }
-            "Remove Favorite".toast(this)
+            getString(R.string.remove_favorite).toast(this)
         } catch (e: SQLiteConstraintException) {
             e.localizedMessage.toast(this)
         }

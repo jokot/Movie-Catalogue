@@ -46,10 +46,6 @@ class MovieFavoriteFragment : Fragment() {
         movieAdapter = MovieAdapter(mutableList) {
             val intent = Intent(context, DetailMovieActivity::class.java)
             intent.putExtra(MainApp.MOVIE, it)
-//            intent.putExtra(
-//                MainApp.M_OR_T,
-//                MainApp.MOVIE
-//            )
             startActivity(intent)
         }
         movieAdapter.notifyDataSetChanged()

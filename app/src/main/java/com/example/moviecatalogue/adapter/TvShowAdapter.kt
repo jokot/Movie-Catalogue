@@ -44,7 +44,7 @@ class TvShowAdapter(
             itemView.text_date.text = item.firstAirDate
             itemView.text_description.text = item.overview
             itemView.text_rating.text = item.voteAverage.toString()
-            when (item.voteAverage) {
+            when (item.voteAverage.toInt()) {
                 in 0..3 -> itemView.text_rating.setTextColor(ContextCompat.getColor(itemView.context,
                     R.color.colorRed
                 ))

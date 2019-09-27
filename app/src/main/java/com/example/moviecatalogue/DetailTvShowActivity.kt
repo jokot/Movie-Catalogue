@@ -95,7 +95,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                     TvShow.VOTE_COUNT to tvShow.voteCount
                 )
             }
-            "Added Favorite".toast(this)
+            getString(R.string.add_favorite).toast(this)
         } catch (e: SQLClientInfoException) {
             e.localizedMessage.toast(this)
         }
@@ -110,7 +110,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                     "id" to tvShow.id
                 )
             }
-            "Remove Favorite".toast(this)
+            getString(R.string.remove_favorite).toast(this)
         } catch (e: SQLiteConstraintException) {
             e.localizedMessage.toast(this)
         }
