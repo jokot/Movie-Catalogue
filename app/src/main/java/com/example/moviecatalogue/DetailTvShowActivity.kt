@@ -125,9 +125,11 @@ class DetailTvShowActivity : AppCompatActivity() {
         getTvShowDetails(tvShow.id)
 
         text_tittle.text = tvShow.name
-        val date = tvShow.firstAirDate
-        val year = date?.substring(0, 4)
-        text_year.text = year
+        if(tvShow.firstAirDate != ""){
+            val date = tvShow.firstAirDate
+            val year = date?.substring(0, 4)
+            text_year.text = year
+        }
         text_overview_detail.text = tvShow.overview
         text_rating.text = tvShow.voteAverage.toString()
         when (tvShow.voteAverage) {

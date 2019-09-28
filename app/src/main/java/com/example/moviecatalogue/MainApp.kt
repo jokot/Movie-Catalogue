@@ -72,6 +72,28 @@ class MainApp : Application() {
         })
     }
 
+    fun searchMovie(
+        name:String?,
+        activity: Activity,
+        onResponse: (MutableList<Movie>) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val call = services.searchMovie(API_KEY, activity.getString(R.string.language),name)
+        call.enqueue(object : Callback<MovieResponse>{
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+                logD(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                if (response.isSuccessful) response.body()?.let {
+                    onResponse(it.movie)
+                } else {
+                    onError(response.errorBody()!!.string())
+                }
+            }
+        })
+    }
+
     fun getDetailsMovie(
         movieId: Int,
         activity: Activity,
@@ -110,6 +132,28 @@ class MainApp : Application() {
             page
         )
         call.enqueue(object : Callback<TvResponse> {
+            override fun onFailure(call: Call<TvResponse>, t: Throwable) {
+                logD(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<TvResponse>, response: Response<TvResponse>) {
+                if (response.isSuccessful) response.body()?.let {
+                    onResponse(it.tvShow)
+                } else {
+                    onError(response.errorBody()!!.string())
+                }
+            }
+        })
+    }
+
+    fun searchTvShow(
+        name:String?,
+        activity: Activity,
+        onResponse: (MutableList<TvShow>) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val call = services.searchTvShow(API_KEY, activity.getString(R.string.language),name)
+        call.enqueue(object : Callback<TvResponse>{
             override fun onFailure(call: Call<TvResponse>, t: Throwable) {
                 logD(t.message.toString())
             }
