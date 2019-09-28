@@ -18,8 +18,14 @@
     <string name="favorite">Favorit</string>
     <string name="add_favorite">Tambah ke favorit</string>
     <string name="remove_favorite">Hapus dari favorit</string>
+    <string name="query_hint">Masukkan kata</string>
+    <string name="search_tv_show">Cari acara TV</string>
+    <string name="search_movie">Cari film</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Halo fragmen kosong</string>
     <string name="change_language_settings">Pengaturan bahasa</string>
+    <string name="search">Cari</string>
+    <string name="notification_settings">Pengaturan notifikasi</string>
 </resources>

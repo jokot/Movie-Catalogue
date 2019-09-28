@@ -26,19 +26,15 @@ class MainApp : Application() {
         const val PAGE = 1
         const val LOG_D = "LOG_D"
         const val MOVIE = "movie"
-        const val M_OR_T = "mort"
         const val TV_SHOW = "tv_show"
         const val FRAGMENT_MOVIE_TAG = "fragment movie tag"
         const val FRAGMENT_TV_TAG = "fragment tv tag"
         const val FRAGMENT_FAVORITE_TAG = "fragment favorite tag"
         const val CHANGE_LANGUAGE_CODE = 123
-        const val SAVE_INSTANCE_LIST_MOVIE = "save instance list movie"
-        const val SAVE_INSTANCE_LIST_TV = "save instance list list"
-        const val SAVE_INSTANCE_FRAGMENT = "save instance fragment"
         const val SHARE_PREF = "share pref"
 
-        val gson: Gson = GsonBuilder().setLenient().create()
-        val retrofit: Retrofit = Retrofit.Builder()
+        private val gson: Gson = GsonBuilder().setLenient().create()
+        private val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

@@ -12,7 +12,10 @@ import com.example.moviecatalogue.fragment.FavoriteFragment
 import com.example.moviecatalogue.fragment.MovieFragment
 import com.example.moviecatalogue.fragment.TvShowFragment
 
+
 class BottomNavigationActivity : AppCompatActivity() {
+
+    private var menuItem: Menu? = null
 
     private val onNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -38,15 +41,38 @@ class BottomNavigationActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+
         return super.onCreateOptionsMenu(menu)
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_change_settings) {
-            val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
-            startActivityForResult(mIntent, MainApp.CHANGE_LANGUAGE_CODE)
-            return true
+        when (item?.itemId) {
+            R.id.action_change_settings -> {
+                val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                startActivityForResult(mIntent, MainApp.CHANGE_LANGUAGE_CODE)
+                return true
+            }
+            R.id.notification_settings -> {
+                startActivity(Intent(this, NotificationSettingsActivity::class.java))
+                return true
+            }
+            R.id.search -> {
+                return when (fragmentState()) {
+                    getString(R.string.movie) -> {
+                        startActivity(Intent(this, SearchMovieActivity::class.java))
+                        true
+                    }
+                    getString(R.string.tv_show) -> {
+                        startActivity(Intent(this, SearchTvActivity::class.java))
+                        true
+                    }
+                    else -> {
+                        true
+                    }
+                }
+
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -72,6 +98,7 @@ class BottomNavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom_navigation)
+
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         if (savedInstanceState != null) {
             when {
@@ -113,13 +140,24 @@ class BottomNavigationActivity : AppCompatActivity() {
 
     }
 
+    private fun fragmentState(): String {
+        return when {
+            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG) != null -> getString(
+                R.string.movie
+            )
+            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_TV_TAG) != null -> getString(R.string.tv_show)
+            else -> getString(R.string.favorite)
+        }
+    }
+
     private fun setUpActionBar(state: Boolean) {
-        if(state){
+        if (state) {
+            menuItem?.getItem(0)?.setIcon(R.drawable.ic_search_white_24dp)
             supportActionBar?.elevation = 10f
-        }else{
+        } else {
+            menuItem?.getItem(0)?.setIcon(R.color.colorPrimaryDark)
             supportActionBar?.elevation = 0f
         }
-
     }
 
     private fun initFragment() {

@@ -1,20 +1,26 @@
 package com.example.moviecatalogue.fragment
 
 
+import android.app.SearchManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.support.v7.widget.Toolbar
+
+import android.view.*
+
 import com.example.moviecatalogue.*
 import com.example.moviecatalogue.adapter.MovieAdapter
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.Movie
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.tool_bar.*
 
 
 class MovieFragment : Fragment() {
@@ -30,6 +36,14 @@ class MovieFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_movie, container, false)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == MainApp.CHANGE_LANGUAGE_CODE) {
+            activity?.finish()
+            startActivity(activity?.intent)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -65,10 +79,6 @@ class MovieFragment : Fragment() {
         movieAdapter = MovieAdapter(list) {
             val intent = Intent(context, DetailMovieActivity::class.java)
             intent.putExtra(MainApp.MOVIE, it)
-            intent.putExtra(
-                MainApp.M_OR_T,
-                MainApp.MOVIE
-            )
             startActivity(intent)
         }
         movieAdapter.notifyDataSetChanged()
