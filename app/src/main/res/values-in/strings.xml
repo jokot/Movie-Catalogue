@@ -21,6 +21,7 @@
     <string name="query_hint">Masukkan kata</string>
     <string name="search_tv_show">Cari acara TV</string>
     <string name="search_movie">Cari film</string>
+    <string name="favorite_movie">Film favorit</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -28,4 +29,6 @@
     <string name="change_language_settings">Pengaturan bahasa</string>
     <string name="search">Cari</string>
     <string name="notification_settings">Pengaturan notifikasi</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

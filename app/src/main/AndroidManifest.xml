@@ -13,7 +13,22 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".NotificationSettingsActivity"></activity>
+
+        <receiver android:name=".widget.ImagesBannerWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/images_banner_widget_info" />
+        </receiver>
+
+        <service
+                android:name=".widget.StackWidgetService"
+                android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".NotificationSettingsActivity" />
         <activity android:name=".SearchTvActivity" />
         <activity android:name=".SearchMovieActivity" />
         <activity android:name=".DetailTvShowActivity" />

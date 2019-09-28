@@ -32,6 +32,7 @@ class MainApp : Application() {
         const val FRAGMENT_FAVORITE_TAG = "fragment favorite tag"
         const val CHANGE_LANGUAGE_CODE = 123
         const val SHARE_PREF = "share pref"
+        const val LANGUAGE = "en-US"
 
         private val gson: Gson = GsonBuilder().setLenient().create()
         private val retrofit: Retrofit = Retrofit.Builder()
@@ -41,6 +42,33 @@ class MainApp : Application() {
         val services: ApiServices = retrofit.create(ApiServices::class.java)
     }
 
+    fun getMovieWidget(
+        onResponse: (MutableList<Movie>) -> Unit,
+        onError: (String) -> Unit,
+        category: String = CATEGORY,
+        page: Int = PAGE
+    ) {
+        val call = services.getMovie(
+            category,
+            API_KEY,
+            LANGUAGE,
+            page
+        )
+
+        call.enqueue(object : Callback<MovieResponse>{
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+                logD(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                if (response.isSuccessful) response.body()?.let {
+                    onResponse(it.movie)
+                } else {
+                    onError(response.errorBody()!!.string())
+                }
+            }
+        })
+    }
 
     fun getMovie(
         activity: Activity,
@@ -73,13 +101,13 @@ class MainApp : Application() {
     }
 
     fun searchMovie(
-        name:String?,
+        name: String?,
         activity: Activity,
         onResponse: (MutableList<Movie>) -> Unit,
         onError: (String) -> Unit
-    ){
-        val call = services.searchMovie(API_KEY, activity.getString(R.string.language),name)
-        call.enqueue(object : Callback<MovieResponse>{
+    ) {
+        val call = services.searchMovie(API_KEY, activity.getString(R.string.language), name)
+        call.enqueue(object : Callback<MovieResponse> {
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 logD(t.message.toString())
             }
@@ -147,13 +175,13 @@ class MainApp : Application() {
     }
 
     fun searchTvShow(
-        name:String?,
+        name: String?,
         activity: Activity,
         onResponse: (MutableList<TvShow>) -> Unit,
         onError: (String) -> Unit
-    ){
-        val call = services.searchTvShow(API_KEY, activity.getString(R.string.language),name)
-        call.enqueue(object : Callback<TvResponse>{
+    ) {
+        val call = services.searchTvShow(API_KEY, activity.getString(R.string.language), name)
+        call.enqueue(object : Callback<TvResponse> {
             override fun onFailure(call: Call<TvResponse>, t: Throwable) {
                 logD(t.message.toString())
             }

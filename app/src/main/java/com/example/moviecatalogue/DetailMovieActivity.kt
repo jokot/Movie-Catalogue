@@ -1,6 +1,10 @@
 package com.example.moviecatalogue
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Intent
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -8,9 +12,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.RemoteViews
 import com.example.moviecatalogue.database.database
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.Movie
+import com.example.moviecatalogue.widget.ImagesBannerWidget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 import org.jetbrains.anko.db.classParser
@@ -91,10 +97,21 @@ class DetailMovieActivity : AppCompatActivity() {
                 )
             }
             getString(R.string.add_favorite).toast(this)
+//            updateWidget()
         } catch (e: SQLClientInfoException) {
             e.localizedMessage.toast(this)
         }
     }
+
+//    private fun updateWidget(){
+//        val appWidgetManager = AppWidgetManager.getInstance(this);
+//
+//        val  appWidgetIds = appWidgetManager.getAppWidgetIds( ComponentName(this, ImagesBannerWidget::class.java))
+//        if (appWidgetIds.isNotEmpty()) {
+//            "${appWidgetIds.size}".toast(this)
+//            ImagesBannerWidget().onUpdate(this, appWidgetManager, appWidgetIds)
+//        }
+//    }
 
     private fun removeFavorite() {
         try {
@@ -105,7 +122,6 @@ class DetailMovieActivity : AppCompatActivity() {
         } catch (e: SQLiteConstraintException) {
             e.localizedMessage.toast(this)
         }
-
     }
 
     private fun setUpLayout() {
