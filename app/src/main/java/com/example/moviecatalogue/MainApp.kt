@@ -33,6 +33,8 @@ class MainApp : Application() {
         const val CHANGE_LANGUAGE_CODE = 123
         const val SHARE_PREF = "share pref"
         const val LANGUAGE = "en-US"
+        const val REALEASE_REMINDER = "REALEASE_REMINDER"
+        const val DAILY_REMINDER = "DAILY_REMINDER"
 
         private val gson: Gson = GsonBuilder().setLenient().create()
         private val retrofit: Retrofit = Retrofit.Builder()
@@ -217,14 +219,14 @@ class MainApp : Application() {
         })
     }
 
-    fun putStringSharePref(key: String, value: String, activity: Activity) {
-        val editor = activity.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE).edit()
+    fun putStringSharePref(key: String, value: String, context: Context) {
+        val editor = context.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE).edit()
         editor.putString(key, value)
         editor.apply()
     }
 
-    fun getStringSharePref(key: String, activity: Activity): String {
-        val sharePref = activity.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE)
+    fun getStringSharePref(key: String, context: Context): String {
+        val sharePref = context.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE)
         return sharePref.getString(key, "")!!
     }
 }

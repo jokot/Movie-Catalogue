@@ -76,6 +76,7 @@ public class ImagesBannerWidget extends AppWidgetProvider {
                 try {
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.images_banner_widget);
+                    Toast.makeText(context, "Pasang kembali Widget", Toast.LENGTH_SHORT).show();
                     int appWidgetId = intent.getIntExtra(WIDGET_ID_EXTRA, 0);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.stack_view);
                     appWidgetManager.updateAppWidget(appWidgetId, views);

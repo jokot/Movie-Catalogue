@@ -25,26 +25,38 @@ class StackRemoteViewsFactoryK(private val mContext: Context) :
     private var listPath: MutableList<String?> = mutableListOf()
     private lateinit var bitmap: Bitmap
 
-    private fun getFavorite(onSucsess: () -> Unit) {
+    private fun getFavorite(onSucsess: () -> Unit,onEmpty: () -> Unit) {
         mContext.database.use {
             val result = select(Movie.TABLE_FAVORITE_MOVIE)
             val favorite = result.parseList(classParser<Movie>())
-            listMovie.clear()
-            listMovie.addAll(favorite)
-            onSucsess()
+            if(favorite.isNotEmpty()){
+                listMovie.clear()
+                listMovie.addAll(favorite)
+                onSucsess()
+            }else{
+                onEmpty()
+            }
+
         }
     }
 
     override fun onCreate() {
-        getFavorite {
+        getFavorite( {
             listMovieOff.clear()
             for (i in 0 until listMovie.size) {
                 if (i < 5) {
-
                     listMovieOff.add(listMovie[i].posterPath)
                 }
             }
-        }
+        },{
+            mWidgetItems.clear()
+            mWidgetItems.add(
+                BitmapFactory.decodeResource(
+                    mContext.resources,
+                    R.drawable.darth_vader
+                )
+            )
+        })
     }
 
     override fun getLoadingView(): RemoteViews? {
@@ -80,13 +92,6 @@ class StackRemoteViewsFactoryK(private val mContext: Context) :
                     .get()
                 rv.setImageViewBitmap(R.id.imageView, bitmap)
             } else {
-                mWidgetItems.clear()
-                mWidgetItems.add(
-                    BitmapFactory.decodeResource(
-                        mContext.resources,
-                        R.drawable.darth_vader
-                    )
-                )
                 rv.setImageViewBitmap(R.id.imageView, mWidgetItems[0])
             }
 

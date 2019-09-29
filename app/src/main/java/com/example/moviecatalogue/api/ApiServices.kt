@@ -48,11 +48,20 @@ interface ApiServices {
     fun searchMovie(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-        @Query("query") name:String?): Call<MovieResponse>
+        @Query("query") name: String?
+    ): Call<MovieResponse>
 
     @GET("/3/search/tv")
     fun searchTvShow(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-        @Query("query") name:String?): Call<TvResponse>
+        @Query("query") name: String?
+    ): Call<TvResponse>
+
+    @GET("/3/discover/movie")
+    fun releasDate(
+        @Query("api_key") apiKey: String,
+        @Query("primary_release_date.gte") gte: String,
+        @Query("primary_release_date.lte") lte: String
+    ): Call<MovieResponse>
 }
