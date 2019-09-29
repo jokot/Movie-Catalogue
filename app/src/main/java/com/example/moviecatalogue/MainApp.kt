@@ -57,7 +57,7 @@ class MainApp : Application() {
             page
         )
 
-        call.enqueue(object : Callback<MovieResponse>{
+        call.enqueue(object : Callback<MovieResponse> {
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 logD(t.message.toString())
             }
@@ -148,6 +148,27 @@ class MainApp : Application() {
         })
     }
 
+    fun getReleaseToday(
+        date:String,
+        onResponse: (MutableList<Movie>) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val call = services.releasToday(API_KEY,date,date)
+        call.enqueue(object : Callback<MovieResponse>{
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+                logD(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                if (response.isSuccessful) response.body()?.let {
+                    onResponse(it.movie)
+                } else {
+                    onError(response.errorBody()!!.string())
+                }
+            }
+        })
+    }
+
     fun getTvShow(
         activity: Activity,
         onResponse: (List<TvShow>) -> Unit,
@@ -219,6 +240,8 @@ class MainApp : Application() {
         })
     }
 
+
+
     fun putStringSharePref(key: String, value: String, context: Context) {
         val editor = context.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE).edit()
         editor.putString(key, value)
@@ -228,5 +251,11 @@ class MainApp : Application() {
     fun getStringSharePref(key: String, context: Context): String {
         val sharePref = context.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE)
         return sharePref.getString(key, "")!!
+    }
+
+    fun removeStringSharePref(key: String, context: Context) {
+        val editor = context.getSharedPreferences(SHARE_PREF, Context.MODE_PRIVATE).edit()
+        editor.remove(key)
+        editor.apply()
     }
 }

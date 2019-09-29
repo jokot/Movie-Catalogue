@@ -59,7 +59,7 @@ interface ApiServices {
     ): Call<TvResponse>
 
     @GET("/3/discover/movie")
-    fun releasDate(
+    fun releasToday(
         @Query("api_key") apiKey: String,
         @Query("primary_release_date.gte") gte: String,
         @Query("primary_release_date.lte") lte: String

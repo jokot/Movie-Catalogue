@@ -22,6 +22,11 @@
     <string name="search_movie">Search movie</string>
     <string name="favorite_movie">Favorite Movie</string>
 
+    <string name="content_title">Catalogue Movie</string>
+    <string name="content_text">Catalogue Movie missing you!</string>
+<!--    <string name="subtext">Sub text</string>-->
+    <string name="send_notif">Send Notif</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="change_language_settings">Language settings</string>
@@ -29,6 +34,7 @@
     <string name="notification_settings">Notification settings</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
     <string name="refresh">refresh</string>
     <string name="release_reminder">Release Reminder</string>
     <string name="reminder_showing">Reminder showing the movie that released today</string>

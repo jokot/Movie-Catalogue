@@ -23,6 +23,10 @@
     <string name="search_movie">Cari film</string>
     <string name="favorite_movie">Film favorit</string>
 
+    <string name="content_title">Katalog Film</string>
+    <string name="content_text">Katalog Film rindu padamu!</string>
+<!--    <string name="subtext">Sub teks</string>-->
+    <string name="send_notif">Kirim Notif</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Halo fragmen kosong</string>
@@ -31,4 +35,10 @@
     <string name="notification_settings">Pengaturan notifikasi</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="refresh">segargan</string>
+    <string name="release_reminder">Pengingat Rilis</string>
+    <string name="reminder_showing">Mengigatkan film yang rilis hari ini</string>
+    <string name="daily_reminder">Pengingat Harian</string>
+    <string name="reminder_for_return_to_app">Mengingatkan untuk membuka app</string>
 </resources>
