@@ -77,21 +77,32 @@ class BottomNavigationActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        val fragmentMovie = supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG)
+        val fragmentTvShow = supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_TV_TAG)
+        val fragmentFavorite =
+            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_FAVORITE_TAG)
         when {
-            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG) != null -> supportFragmentManager.putFragment(
-                outState!!, MainApp.FRAGMENT_MOVIE_TAG,
-                supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG)!!
-            )
-            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_TV_TAG) != null -> supportFragmentManager.putFragment(
-                outState!!, MainApp.FRAGMENT_TV_TAG,
-                supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_TV_TAG)!!
-            )
-            else -> supportFragmentManager.putFragment(
-                outState!!, MainApp.FRAGMENT_FAVORITE_TAG,
-                supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_FAVORITE_TAG)!!
-            )
+            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_MOVIE_TAG) != null ->
+                fragmentMovie?.let {
+                    supportFragmentManager.putFragment(
+                        outState, MainApp.FRAGMENT_MOVIE_TAG,
+                        it
+                    )
+                }
+            supportFragmentManager.findFragmentByTag(MainApp.FRAGMENT_TV_TAG) != null -> fragmentTvShow?.let {
+                supportFragmentManager.putFragment(
+                    outState, MainApp.FRAGMENT_TV_TAG,
+                    it
+                )
+            }
+            else -> fragmentFavorite?.let {
+                supportFragmentManager.putFragment(
+                    outState, MainApp.FRAGMENT_FAVORITE_TAG,
+                    it
+                )
+            }
         }
     }
 
@@ -110,7 +121,7 @@ class BottomNavigationActivity : AppCompatActivity() {
                         savedInstanceState,
                         MainApp.FRAGMENT_MOVIE_TAG
                     )
-                    changeFragment(mContent!!, MainApp.FRAGMENT_MOVIE_TAG)
+                    mContent?.let { changeFragment(it, MainApp.FRAGMENT_MOVIE_TAG) }
                 }
                 supportFragmentManager.getFragment(
                     savedInstanceState,
@@ -121,14 +132,14 @@ class BottomNavigationActivity : AppCompatActivity() {
                             savedInstanceState,
                             MainApp.FRAGMENT_TV_TAG
                         )
-                    changeFragment(mContent!!, MainApp.FRAGMENT_TV_TAG)
+                    mContent?.let { changeFragment(it, MainApp.FRAGMENT_TV_TAG) }
                 }
                 else -> {
                     val mContent = supportFragmentManager.getFragment(
                         savedInstanceState,
                         MainApp.FRAGMENT_FAVORITE_TAG
                     )
-                    changeFragment(mContent!!, MainApp.FRAGMENT_FAVORITE_TAG)
+                    mContent?.let { changeFragment(it, MainApp.FRAGMENT_FAVORITE_TAG) }
                 }
             }
 

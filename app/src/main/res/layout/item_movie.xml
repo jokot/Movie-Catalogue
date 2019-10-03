@@ -19,7 +19,8 @@
                     android:id="@+id/image_movie"
                     android:layout_marginEnd="12dp"
                     android:layout_width="120dp"
-                    android:layout_height="120dp"/>
+                    android:layout_height="120dp"
+                    android:contentDescription="@string/movie_image"/>
             <ProgressBar
                     android:id="@+id/pb_item_main"
                     android:layout_width="70dp"

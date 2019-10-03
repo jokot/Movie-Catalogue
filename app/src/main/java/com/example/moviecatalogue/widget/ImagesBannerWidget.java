@@ -3,7 +3,6 @@ package com.example.moviecatalogue.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,8 +12,6 @@ import android.widget.Toast;
 
 import com.example.moviecatalogue.MainApp;
 import com.example.moviecatalogue.R;
-
-import java.util.Objects;
 
 /**
  * Implementation of App Widget functionality.
@@ -27,7 +24,7 @@ public class ImagesBannerWidget extends AppWidgetProvider {
 
 
     void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+                         int appWidgetId) {
 
         try {
             Intent intent = new Intent(context, StackWidgetService.class);
@@ -49,8 +46,8 @@ public class ImagesBannerWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.btn_click, getPendingSelfIntent(context, appWidgetId, WIDGET_CLICK));
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
-        }catch (Exception e){
-            Log.d(MainApp.LOG_D, "updateAppWidget: "+e.getMessage());
+        } catch (Exception e) {
+            Log.d(MainApp.LOG_D, "updateAppWidget: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -78,9 +75,9 @@ public class ImagesBannerWidget extends AppWidgetProvider {
                     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.images_banner_widget);
                     Toast.makeText(context, "Pasang kembali Widget", Toast.LENGTH_SHORT).show();
                     int appWidgetId = intent.getIntExtra(WIDGET_ID_EXTRA, 0);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.stack_view);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.stack_view);
                     appWidgetManager.updateAppWidget(appWidgetId, views);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(MainApp.LOG_D, "onReceive: " + e.getMessage());
                 }
@@ -90,6 +87,7 @@ public class ImagesBannerWidget extends AppWidgetProvider {
     }
 
     private static String WIDGET_ID_EXTRA = "widget_id_extra";
+
     protected PendingIntent getPendingSelfIntent(Context context, int appWidgetId, String action) {
         Intent intent = new Intent(context, getClass());
         intent.setAction(action);

@@ -19,9 +19,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainApp : Application() {
 
     companion object {
-        const val BASE_URL = "https://api.themoviedb.org/"
-        const val API_KEY = "b40f9f903ef4b4f89c53cfb00d7aeea5"
-        const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185"
+        const val BASE_URL = BuildConfig.BASE_URL
+        const val API_KEY = BuildConfig.API_KEY
+        const val IMAGE_BASE_URL = BuildConfig.IMAGE_BASE_URL
         const val CATEGORY = "popular"
         const val PAGE = 1
         const val LOG_D = "LOG_D"

@@ -41,4 +41,7 @@
     <string name="reminder_showing">Mengigatkan film yang rilis hari ini</string>
     <string name="daily_reminder">Pengingat Harian</string>
     <string name="reminder_for_return_to_app">Mengingatkan untuk membuka app</string>
+    <string name="movie_poster">Poster film</string>
+    <string name="tv_show_poster">Poster acara tv</string>
+    <string name="movie_image">Gambar film</string>
 </resources>
