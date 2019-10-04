@@ -12,13 +12,11 @@ import android.view.MenuItem
 import android.view.View
 import com.example.moviecatalogue.adapter.TvShowAdapter
 import com.example.moviecatalogue.ext.logD
-import com.example.moviecatalogue.model.TvShow
 import kotlinx.android.synthetic.main.activity_search_tv.*
 
 class SearchTvActivity : AppCompatActivity() {
 
     private val main = MainApp()
-    private var mutableList = mutableListOf<TvShow>()
     private lateinit var tvShowAdapter: TvShowAdapter
     private var name: String? = ""
 
@@ -30,7 +28,7 @@ class SearchTvActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
             title = getString(R.string.search_tv_show)
         }
-        initRecycler(mutableList)
+        initRecycler()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -82,8 +80,8 @@ class SearchTvActivity : AppCompatActivity() {
         })
     }
 
-    private fun initRecycler(list: MutableList<TvShow>) {
-        tvShowAdapter = TvShowAdapter(list) {
+    private fun initRecycler() {
+        tvShowAdapter = TvShowAdapter {
             val intent = Intent(this, DetailTvShowActivity::class.java)
             intent.putExtra(MainApp.TV_SHOW, it)
             startActivity(intent)

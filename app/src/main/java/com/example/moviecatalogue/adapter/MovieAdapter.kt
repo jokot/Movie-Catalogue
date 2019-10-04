@@ -11,15 +11,43 @@ import com.example.moviecatalogue.model.Movie
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
+import java.util.*
 
 class MovieAdapter(
-    private var mutableList: MutableList<Movie>,
     private var listener: (Movie) -> Unit
 ) : RecyclerView.Adapter<MovieAdapter.MainViewHolder>() {
 
-    fun setData(items: MutableList<Movie>){
-        mutableList.clear()
-        mutableList.addAll(items)
+    var listMovies = ArrayList<Movie>()
+        set(listMovies) {
+            if (listMovies.size > 0) {
+                this.listMovies.clear()
+            }
+            this.listMovies.addAll(listMovies)
+
+            notifyDataSetChanged()
+        }
+
+    fun addItem(movie: Movie) {
+        this.listMovies.add(movie)
+        notifyItemInserted(this.listMovies.size - 1)
+    }
+
+    fun updateItem(position: Int, movie: Movie) {
+        this.listMovies[position] = movie
+        notifyItemChanged(position, movie)
+    }
+
+    fun removeItem(position: Int) {
+        this.listMovies.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, this.listMovies.size)
+    }
+
+    fun setData(items: MutableList<Movie>) {
+        listMovies.clear()
+        listMovies.addAll(items)
+//        mutableList.clear()
+//        mutableList.addAll(items)
         notifyDataSetChanged()
     }
 
@@ -31,11 +59,11 @@ class MovieAdapter(
 
 
     override fun getItemCount(): Int {
-        return mutableList.size
+        return listMovies.size
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, potition: Int) {
-        holder.bindItem(mutableList[potition], listener)
+        holder.bindItem(listMovies[potition], listener)
     }
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,9 +73,12 @@ class MovieAdapter(
             itemView.text_description.text = item.overview
             itemView.text_rating.text = item.voteAverage.toString()
             when (item.voteAverage) {
-                in 0..3 -> itemView.text_rating.setTextColor(ContextCompat.getColor(itemView.context,
-                    R.color.colorRed
-                ))
+                in 0..3 -> itemView.text_rating.setTextColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.colorRed
+                    )
+                )
                 in 4..6 -> itemView.text_rating.setTextColor(
                     ContextCompat.getColor(
                         itemView.context,

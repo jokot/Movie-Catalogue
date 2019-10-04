@@ -1,29 +1,20 @@
 package com.example.moviecatalogue
 
+
 import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
-import android.content.Intent
-import android.database.sqlite.SQLiteConstraintException
+import android.content.ContentValues
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.RemoteViews
-import com.example.moviecatalogue.database.database
+import com.example.moviecatalogue.database.DatabaseContract
+import com.example.moviecatalogue.database.MovieHelper
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.Movie
-import com.example.moviecatalogue.widget.ImagesBannerWidget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail_movie.*
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.delete
-import org.jetbrains.anko.db.insert
-import org.jetbrains.anko.db.select
-import java.sql.SQLClientInfoException
 
 class DetailMovieActivity : AppCompatActivity() {
 
@@ -33,6 +24,8 @@ class DetailMovieActivity : AppCompatActivity() {
     private var isFavorite = false
     private var menuItem: Menu? = null
 
+    private lateinit var movieHelper: MovieHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
@@ -40,6 +33,8 @@ class DetailMovieActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
+        movieHelper = MovieHelper.getInstance(applicationContext)
+
         setUpLayout()
         favoriteState()
     }
@@ -68,60 +63,84 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun favoriteState() {
-        database.use {
-            val result = select(Movie.TABLE_FAVORITE_MOVIE)
-                .whereArgs(
-                    "(${Movie.MOVIE_ID} = {id})",
-                    "id" to movie.id
-                )
-            val favorite = result.parseList(classParser<Movie>())
-            if (favorite.isNotEmpty()) isFavorite = true
-
-            setFavorite()
+        val result = movieHelper.queryById(movie.id.toString())
+        if (result.count > 0) {
+            isFavorite = true
         }
+        setFavorite()
+
+//        database.use {
+//            val result = select(Movie.TABLE_FAVORITE_MOVIE)
+//                .whereArgs(
+//                    "(${Movie.MOVIE_ID} = {id})",
+//                    "id" to movie.id
+//                )
+//            val favorite = result.parseList(classParser<Movie>())
+//            if (favorite.isNotEmpty()) isFavorite = true
+//
+//            setFavorite()
+//        }
     }
 
     private fun addFavorite() {
+        // Gunakan contentvalues untuk menampung data
+        val values = ContentValues()
+        values.put(DatabaseContract.MovieColumns.BACKDROP_PATH, movie.backdropPath)
+        values.put(DatabaseContract.MovieColumns._ID, movie.id)
+        values.put(DatabaseContract.MovieColumns.OVERVIEW, movie.overview)
+        values.put(DatabaseContract.MovieColumns.POSTER_PATH, movie.posterPath)
+        values.put(DatabaseContract.MovieColumns.RELEAS_DATE, movie.releaseDate)
+        values.put(DatabaseContract.MovieColumns.TITLE, movie.title)
+        values.put(DatabaseContract.MovieColumns.VOTE_VARAGE, movie.voteAverage)
+        /*
+        Jika merupakan edit maka setresultnya UPDATE, dan jika bukan maka setresultnya ADD
+        */
+        val result = movieHelper.insert(values)
 
-        try {
-            database.use {
-                insert(
-                    Movie.TABLE_FAVORITE_MOVIE,
-                    Movie.BACKDROP_PATH to movie.backdropPath,
-                    Movie.MOVIE_ID to movie.id,
-                    Movie.OVERVIEW to movie.overview,
-                    Movie.POSTER_PATH to movie.posterPath,
-                    Movie.RELEAS_DATE to movie.releaseDate,
-                    Movie.TITLE to movie.title,
-                    Movie.VOTE_VARAGE to movie.voteAverage
-                )
-            }
+        if (result > 0) {
             getString(R.string.add_favorite).toast(this)
-//            updateWidget()
-        } catch (e: SQLClientInfoException) {
-            e.localizedMessage.toast(this)
+        } else {
+            "Gagal menambah data".toast(this)
         }
+
+//        try {
+//            database.use {
+//                insert(
+//                    Movie.TABLE_FAVORITE_MOVIE,
+//                    Movie.BACKDROP_PATH to movie.backdropPath,
+//                    Movie.MOVIE_ID to movie.id,
+//                    Movie.OVERVIEW to movie.overview,
+//                    Movie.POSTER_PATH to movie.posterPath,
+//                    Movie.RELEAS_DATE to movie.releaseDate,
+//                    Movie.TITLE to movie.title,
+//                    Movie.VOTE_VARAGE to movie.voteAverage
+//                )
+//            }
+//            getString(R.string.add_favorite).toast(this)
+////            updateWidget()
+//        } catch (e: SQLClientInfoException) {
+//            e.localizedMessage.toast(this)
+//        }
     }
 
-//    private fun updateWidget(){
-//        val appWidgetManager = AppWidgetManager.getInstance(this);
-//
-//        val  appWidgetIds = appWidgetManager.getAppWidgetIds( ComponentName(this, ImagesBannerWidget::class.java))
-//        if (appWidgetIds.isNotEmpty()) {
-//            "${appWidgetIds.size}".toast(this)
-//            ImagesBannerWidget().onUpdate(this, appWidgetManager, appWidgetIds)
-//        }
-//    }
 
     private fun removeFavorite() {
-        try {
-            database.use {
-                delete(Movie.TABLE_FAVORITE_MOVIE, "(MOVIE_ID = {id})", "id" to movie.id)
-            }
+
+        val result = movieHelper.deleteById(movie.id.toString()).toLong()
+        if (result > 0) {
             getString(R.string.remove_favorite).toast(this)
-        } catch (e: SQLiteConstraintException) {
-            e.localizedMessage.toast(this)
+        } else {
+            "Gagal menghapus data".toast(this)
         }
+
+//        try {
+//            database.use {
+//                delete(Movie.TABLE_FAVORITE_MOVIE, "(MOVIE_ID = {id})", "id" to movie.id)
+//            }
+//            getString(R.string.remove_favorite).toast(this)
+//        } catch (e: SQLiteConstraintException) {
+//            e.localizedMessage.toast(this)
+//        }
     }
 
     private fun setUpLayout() {
@@ -134,7 +153,7 @@ class DetailMovieActivity : AppCompatActivity() {
         text_year.text = year
         text_overview_detail.text = movie.overview
         text_rating.text = movie.voteAverage.toString()
-        when (movie.voteAverage) {
+        when (movie.voteAverage.toInt()) {
             in 0..3 -> text_rating.setTextColor(ContextCompat.getColor(this, R.color.colorRed))
             in 4..6 -> text_rating.setTextColor(
                 ContextCompat.getColor(

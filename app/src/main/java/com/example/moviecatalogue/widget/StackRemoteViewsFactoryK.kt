@@ -11,10 +11,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviecatalogue.MainApp
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.database.database
+import com.example.moviecatalogue.database.MovieHelper
+import com.example.moviecatalogue.helper.MappingHelper
 import com.example.moviecatalogue.model.Movie
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.select
 
 class StackRemoteViewsFactoryK(private val mContext: Context) :
     RemoteViewsService.RemoteViewsFactory {
@@ -24,31 +23,30 @@ class StackRemoteViewsFactoryK(private val mContext: Context) :
     private var listMovieOff: MutableList<String?> = mutableListOf()
     private var listPath: MutableList<String?> = mutableListOf()
     private lateinit var bitmap: Bitmap
+    private lateinit var movieHelper: MovieHelper
 
-    private fun getFavorite(onSucsess: () -> Unit,onEmpty: () -> Unit) {
-        mContext.database.use {
-            val result = select(Movie.TABLE_FAVORITE_MOVIE)
-            val favorite = result.parseList(classParser<Movie>())
-            if(favorite.isNotEmpty()){
-                listMovie.clear()
-                listMovie.addAll(favorite)
-                onSucsess()
-            }else{
-                onEmpty()
-            }
-
+    private fun getFavorite(onSucsess: () -> Unit, onEmpty: () -> Unit) {
+        movieHelper = MovieHelper.getInstance(mContext)
+        val cursor = movieHelper.queryAll()
+        val favorite = MappingHelper.mapCursorToArrayListMovie(cursor)
+        if (favorite.size > 0) {
+            listMovie.clear()
+            listMovie.addAll(favorite)
+            onSucsess()
+        } else {
+            onEmpty()
         }
     }
 
     override fun onCreate() {
-        getFavorite( {
+        getFavorite({
             listMovieOff.clear()
             for (i in 0 until listMovie.size) {
                 if (i < 5) {
                     listMovieOff.add(listMovie[i].posterPath)
                 }
             }
-        },{
+        }, {
             mWidgetItems.clear()
             mWidgetItems.add(
                 BitmapFactory.decodeResource(

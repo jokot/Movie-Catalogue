@@ -13,13 +13,40 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class TvShowAdapter(
-    private var mutableList: MutableList<TvShow>,
     private var listener: (TvShow) -> Unit
 ) : RecyclerView.Adapter<TvShowAdapter.MainViewHolder>() {
 
-    fun setData(items: MutableList<TvShow>){
-        mutableList.clear()
-        mutableList.addAll(items)
+    var listTvShows = ArrayList<TvShow>()
+        set(listTvShows) {
+            if (listTvShows.size > 0) {
+                this.listTvShows.clear()
+            }
+            this.listTvShows.addAll(listTvShows)
+
+            notifyDataSetChanged()
+        }
+
+    fun addItem(tvShow: TvShow) {
+        this.listTvShows.add(tvShow)
+        notifyItemInserted(this.listTvShows.size - 1)
+    }
+
+    fun updateItem(position: Int, tvShow: TvShow) {
+        this.listTvShows[position] = tvShow
+        notifyItemChanged(position, tvShow)
+    }
+
+    fun removeItem(position: Int) {
+        this.listTvShows.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, this.listTvShows.size)
+    }
+
+    fun setData(items: MutableList<TvShow>) {
+        listTvShows.clear()
+        listTvShows.addAll(items)
+//        mutableList.clear()
+//        mutableList.addAll(items)
         notifyDataSetChanged()
     }
 
@@ -31,11 +58,11 @@ class TvShowAdapter(
     }
 
     override fun getItemCount(): Int {
-        return mutableList.size
+        return listTvShows.size
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, potition: Int) {
-        holder.bindItem(mutableList[potition], listener)
+        holder.bindItem(listTvShows[potition], listener)
     }
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,9 +72,12 @@ class TvShowAdapter(
             itemView.text_description.text = item.overview
             itemView.text_rating.text = item.voteAverage.toString()
             when (item.voteAverage.toInt()) {
-                in 0..3 -> itemView.text_rating.setTextColor(ContextCompat.getColor(itemView.context,
-                    R.color.colorRed
-                ))
+                in 0..3 -> itemView.text_rating.setTextColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.colorRed
+                    )
+                )
                 in 4..6 -> itemView.text_rating.setTextColor(
                     ContextCompat.getColor(
                         itemView.context,

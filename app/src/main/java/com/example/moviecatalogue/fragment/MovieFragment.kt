@@ -1,32 +1,26 @@
 package com.example.moviecatalogue.fragment
 
 
-import android.app.SearchManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
-import android.provider.Settings
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
-
-import android.view.*
-
-import com.example.moviecatalogue.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.moviecatalogue.DetailMovieActivity
+import com.example.moviecatalogue.MainApp
+import com.example.moviecatalogue.MainViewModel
+import com.example.moviecatalogue.R
 import com.example.moviecatalogue.adapter.MovieAdapter
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.Movie
 import kotlinx.android.synthetic.main.fragment_movie.*
-import kotlinx.android.synthetic.main.tool_bar.*
 
 
 class MovieFragment : Fragment() {
-
-    private val main = MainApp()
-    private var mutableList = mutableListOf<Movie>()
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var mainViewModel: MainViewModel
 
@@ -49,12 +43,12 @@ class MovieFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initRecycler(mutableList)
+        initRecycler()
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         mainViewModel.getMovie().observe(this, getMovie)
 
-        if (savedInstanceState?.getBoolean(MainApp.MOVIE) != true){
+        if (savedInstanceState?.getBoolean(MainApp.MOVIE) != true) {
             showLoading(true)
             mainViewModel.setMovie(requireActivity()) {
                 showLoading(false)
@@ -65,7 +59,7 @@ class MovieFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(MainApp.MOVIE,true)
+        outState.putBoolean(MainApp.MOVIE, true)
     }
 
     private val getMovie = Observer<MutableList<Movie>> {
@@ -75,8 +69,8 @@ class MovieFragment : Fragment() {
         }
     }
 
-    private fun initRecycler(list: MutableList<Movie>) {
-        movieAdapter = MovieAdapter(list) {
+    private fun initRecycler() {
+        movieAdapter = MovieAdapter {
             val intent = Intent(context, DetailMovieActivity::class.java)
             intent.putExtra(MainApp.MOVIE, it)
             startActivity(intent)

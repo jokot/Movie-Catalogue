@@ -10,7 +10,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.moviecatalogue.*
+import com.example.moviecatalogue.DetailTvShowActivity
+import com.example.moviecatalogue.MainApp
+import com.example.moviecatalogue.MainViewModel
+import com.example.moviecatalogue.R
 import com.example.moviecatalogue.adapter.TvShowAdapter
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.TvShow
@@ -18,9 +21,6 @@ import kotlinx.android.synthetic.main.fragment_tv_show.*
 
 
 class TvShowFragment : Fragment() {
-
-    private val main = MainApp()
-    private var mutableList = mutableListOf<TvShow>()
     private lateinit var tvAdapter: TvShowAdapter
     private lateinit var mainViewModel: MainViewModel
 
@@ -41,7 +41,7 @@ class TvShowFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initRecycler(mutableList)
+        initRecycler()
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         mainViewModel.getTvShow().observe(this, getTvShow)
 
@@ -61,8 +61,8 @@ class TvShowFragment : Fragment() {
         }
     }
 
-    private fun initRecycler(list: MutableList<TvShow>) {
-        tvAdapter = TvShowAdapter(list) {
+    private fun initRecycler() {
+        tvAdapter = TvShowAdapter {
             val intent =
                 Intent(context, DetailTvShowActivity::class.java)
             intent.putExtra(MainApp.TV_SHOW, it)

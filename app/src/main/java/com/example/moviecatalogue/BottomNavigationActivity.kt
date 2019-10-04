@@ -8,12 +8,16 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.example.moviecatalogue.database.MovieHelper
+import com.example.moviecatalogue.database.TvShowHelper
 import com.example.moviecatalogue.fragment.FavoriteFragment
 import com.example.moviecatalogue.fragment.MovieFragment
 import com.example.moviecatalogue.fragment.TvShowFragment
 
 
 class BottomNavigationActivity : AppCompatActivity() {
+    private lateinit var movieHelper: MovieHelper
+    private lateinit var tvShowHelper: TvShowHelper
 
     private var menuItem: Menu? = null
 
@@ -110,6 +114,11 @@ class BottomNavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom_navigation)
 
+        movieHelper = MovieHelper.getInstance(applicationContext)
+        movieHelper.open()
+        tvShowHelper = TvShowHelper.getInstance(applicationContext)
+        tvShowHelper.open()
+
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         if (savedInstanceState != null) {
             when {
@@ -191,5 +200,11 @@ class BottomNavigationActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.frame_fragment, fragment, tag)
             .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        movieHelper.close()
+        tvShowHelper.close()
     }
 }

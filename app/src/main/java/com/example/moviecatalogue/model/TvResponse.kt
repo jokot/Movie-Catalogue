@@ -82,19 +82,5 @@ data class TvShow(
         override fun newArray(size: Int): Array<TvShow?> {
             return arrayOfNulls(size)
         }
-
-        const val TABLE_FAVORITE_TV_SHOW: String = "TABLE_FAVORITE_TV_SHOW"
-        const val BACKDROP_PATH: String = "BACKDROP_PATH"
-        const val ID: String = "ID_"
-        const val TV_SHOW_ID: String = "TV_SHOW_ID"
-        const val OVERVIEW: String = "OVERVIEW"
-        const val POSTER_PATH: String = "POSTER_PATH"
-        const val FIRST_AIR_DATE: String = "FIRST_AIR_DATE"
-        const val NAME: String = "NAME"
-        const val ORIGINAL_LANGUAGE: String = "ORIGINAL_LANGUAGE"
-        const val ORIGINAL_NAME: String = "ORIGINAL_NAME"
-        const val POPULARITY: String = "POPULARITY"
-        const val VOTE_AVERAGE: String = "VOTE_AVERAGE"
-        const val VOTE_COUNT: String = "VOTE_COUNT"
     }
 }
