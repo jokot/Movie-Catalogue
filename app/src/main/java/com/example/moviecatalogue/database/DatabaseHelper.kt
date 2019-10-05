@@ -22,7 +22,7 @@ internal class DatabaseHelper(context: Context) :
 
     companion object {
 
-        private const val DATABASE_NAME = "FavoriteCatalogue.db"
+        private const val DATABASE_NAME = "CatalogueFavoriteMovieAndTvShowDicoding.db"
 
         private const val DATABASE_VERSION = 1
 
@@ -39,7 +39,7 @@ internal class DatabaseHelper(context: Context) :
 
         private val SQL_CREATE_TABLE_TV_SHOW = "CREATE TABLE $TABLE_FAVORITE_TV_SHOW" +
                 " (${_ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " (${DatabaseContract.TvShowColumns._ID} INTEGER," +
+                " ${DatabaseContract.TvShowColumns._ID} INTEGER," +
                 " ${DatabaseContract.TvShowColumns.BACKDROP_PATH} TEXT NOT NULL," +
                 " ${DatabaseContract.TvShowColumns.OVERVIEW} TEXT NOT NULL," +
                 " ${DatabaseContract.TvShowColumns.POSTER_PATH} TEXT NOT NULL," +

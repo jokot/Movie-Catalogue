@@ -3,6 +3,7 @@ package com.example.moviecatalogue
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.moviecatalogue.database.DatabaseContract
-import com.example.moviecatalogue.database.MovieHelper
+import com.example.moviecatalogue.database.DatabaseContract.MovieColumns.Companion.CONTENT_URI_MOVIE
 import com.example.moviecatalogue.ext.toast
 import com.example.moviecatalogue.model.Movie
 import com.squareup.picasso.Picasso
@@ -24,16 +25,17 @@ class DetailMovieActivity : AppCompatActivity() {
     private var isFavorite = false
     private var menuItem: Menu? = null
 
-    private lateinit var movieHelper: MovieHelper
+    private lateinit var uriWithId: Uri
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
+
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-        movieHelper = MovieHelper.getInstance(applicationContext)
 
         setUpLayout()
         favoriteState()
@@ -63,9 +65,12 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private fun favoriteState() {
-        val result = movieHelper.queryById(movie.id.toString())
-        if (result.count > 0) {
-            isFavorite = true
+        uriWithId = Uri.parse(CONTENT_URI_MOVIE.toString() + "/" + movie.id)
+        val cursor = contentResolver.query(uriWithId, null, null, null, null)
+        if (cursor != null) {
+            if (cursor.count > 0) {
+                isFavorite = true
+            }
         }
         setFavorite()
 
@@ -95,14 +100,8 @@ class DetailMovieActivity : AppCompatActivity() {
         /*
         Jika merupakan edit maka setresultnya UPDATE, dan jika bukan maka setresultnya ADD
         */
-        val result = movieHelper.insert(values)
-
-        if (result > 0) {
-            getString(R.string.add_favorite).toast(this)
-        } else {
-            "Gagal menambah data".toast(this)
-        }
-
+        contentResolver.insert(CONTENT_URI_MOVIE, values)
+        getString(R.string.add_favorite).toast(this)
 //        try {
 //            database.use {
 //                insert(
@@ -125,13 +124,8 @@ class DetailMovieActivity : AppCompatActivity() {
 
 
     private fun removeFavorite() {
-
-        val result = movieHelper.deleteById(movie.id.toString()).toLong()
-        if (result > 0) {
-            getString(R.string.remove_favorite).toast(this)
-        } else {
-            "Gagal menghapus data".toast(this)
-        }
+        contentResolver.delete(uriWithId, null, null)
+        getString(R.string.remove_favorite).toast(this)
 
 //        try {
 //            database.use {

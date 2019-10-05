@@ -1,6 +1,7 @@
 package com.example.moviecatalogue
 
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -22,6 +23,8 @@ class DetailTvShowActivity : AppCompatActivity() {
     private var isFavorite = false
     private var menuItem: Menu? = null
 
+    private lateinit var uriWithId: Uri
+
     private lateinit var tvShowHelper: TvShowHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +35,7 @@ class DetailTvShowActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
         tvShowHelper = TvShowHelper.getInstance(applicationContext)
+
         setUpLayout()
         favoriteState()
     }
@@ -63,9 +67,8 @@ class DetailTvShowActivity : AppCompatActivity() {
     }
 
     private fun favoriteState() {
-
         val result = tvShowHelper.queryById(tvShow.id.toString())
-        if(result.count > 0){
+        if (result.count > 0) {
             isFavorite = true
         }
         setFavorite()
@@ -87,6 +90,8 @@ class DetailTvShowActivity : AppCompatActivity() {
         /*
         Jika merupakan edit maka setresultnya UPDATE, dan jika bukan maka setresultnya ADD
         */
+//        contentResolver.insert(CONTENT_URI_TV_SHOW, values)
+
         val result = tvShowHelper.insert(values)
 
         if (result > 0) {
@@ -98,6 +103,7 @@ class DetailTvShowActivity : AppCompatActivity() {
 
     private fun removeFavorite() {
 
+//        contentResolver.delete(uriWithId, null, null)
         val result = tvShowHelper.deleteById(tvShow.id.toString()).toLong()
         if (result > 0) {
             getString(R.string.remove_favorite).toast(this)
@@ -112,7 +118,7 @@ class DetailTvShowActivity : AppCompatActivity() {
         getTvShowDetails(tvShow.id)
 
         text_tittle.text = tvShow.name
-        if(tvShow.firstAirDate != ""){
+        if (tvShow.firstAirDate != "") {
             val date = tvShow.firstAirDate
             val year = date?.substring(0, 4)
             text_year.text = year

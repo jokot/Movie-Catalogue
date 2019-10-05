@@ -18,10 +18,10 @@ import com.example.moviecatalogue.R;
  */
 public class ImagesBannerWidget extends AppWidgetProvider {
 
-    private static final String TOAST_ACTION = "com.dicoding.picodiploma.TOAST_ACTION";
     public static final String EXTRA_ITEM = "com.dicoding.picodiploma.EXTRA_ITEM";
+    private static final String TOAST_ACTION = "com.dicoding.picodiploma.TOAST_ACTION";
     private static String WIDGET_CLICK = "widgetsclick";
-
+    private static String WIDGET_ID_EXTRA = "widget_id_extra";
 
     void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                          int appWidgetId) {
@@ -85,8 +85,6 @@ public class ImagesBannerWidget extends AppWidgetProvider {
         }
 
     }
-
-    private static String WIDGET_ID_EXTRA = "widget_id_extra";
 
     protected PendingIntent getPendingSelfIntent(Context context, int appWidgetId, String action) {
         Intent intent = new Intent(context, getClass());

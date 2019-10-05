@@ -8,9 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moviecatalogue.BottomNavigationActivity
 import com.example.moviecatalogue.DetailTvShowActivity
 import com.example.moviecatalogue.MainApp
-
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.adapter.TvShowAdapter
 import com.example.moviecatalogue.database.TvShowHelper
@@ -43,11 +43,11 @@ class TvShowFavoriteFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_tv_show_favorite, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initRecycler()
 
-        tvShowHelper = TvShowHelper.getInstance(requireContext())
+        tvShowHelper = TvShowHelper.getInstance(BottomNavigationActivity.getContenxtApplication())
 
         if (savedInstanceState == null) {
             loadNotesAsync()
@@ -61,12 +61,10 @@ class TvShowFavoriteFragment : Fragment() {
 
     private fun loadNotesAsync() {
         GlobalScope.launch(Dispatchers.Main) {
-            showLoading(true)
             val deferredNotes = async(Dispatchers.IO) {
                 val cursor = tvShowHelper.queryAll()
                 MappingHelper.mapCursorToArrayListTvShow(cursor)
             }
-            showLoading(false)
             val notes = deferredNotes.await()
             if (notes.size > 0) {
                 tvAdapter.listTvShows = notes
@@ -90,13 +88,5 @@ class TvShowFavoriteFragment : Fragment() {
         }
         rv_main.adapter = tvAdapter
         rv_main.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            pb_main.visibility = View.VISIBLE
-        } else {
-            pb_main.visibility = View.GONE
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.moviecatalogue
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -18,6 +19,15 @@ import com.example.moviecatalogue.fragment.TvShowFragment
 class BottomNavigationActivity : AppCompatActivity() {
     private lateinit var movieHelper: MovieHelper
     private lateinit var tvShowHelper: TvShowHelper
+
+    companion object {
+        lateinit var contextOfApplication: Context
+
+        fun getContenxtApplication(): Context {
+            return contextOfApplication
+        }
+    }
+
 
     private var menuItem: Menu? = null
 
@@ -113,9 +123,10 @@ class BottomNavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom_navigation)
+        contextOfApplication = applicationContext
 
-        movieHelper = MovieHelper.getInstance(applicationContext)
-        movieHelper.open()
+//        movieHelper = MovieHelper.getInstance(applicationContext)
+//        movieHelper.open()
         tvShowHelper = TvShowHelper.getInstance(applicationContext)
         tvShowHelper.open()
 

@@ -60,6 +60,7 @@ data class Movie(
         val CREATOR: Parcelable.Creator<Movie> = object : Parcelable.Creator<Movie> {
             override fun createFromParcel(source: Parcel): Movie =
                 Movie(source)
+
             override fun newArray(size: Int): Array<Movie?> = arrayOfNulls(size)
         }
     }

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.example.moviecatalogue.database.DatabaseContract.TvShowColumns.Companion.TABLE_FAVORITE_TV_SHOW
 import com.example.moviecatalogue.database.DatabaseContract.TvShowColumns.Companion._ID
 
-class TvShowHelper(context: Context){
+class TvShowHelper(context: Context) {
 
     companion object {
         private const val DATABASE_TABLE = TABLE_FAVORITE_TV_SHOW
@@ -61,7 +61,8 @@ class TvShowHelper(context: Context){
             null,
 //            "$_ID ASC",
             null,
-            null)
+            null
+        )
     }
 
     /**

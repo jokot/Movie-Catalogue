@@ -2,6 +2,7 @@ package com.example.moviecatalogue.widget
 
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviecatalogue.MainApp
 import com.example.moviecatalogue.R
+import com.example.moviecatalogue.database.DatabaseContract
 import com.example.moviecatalogue.database.MovieHelper
 import com.example.moviecatalogue.helper.MappingHelper
 import com.example.moviecatalogue.model.Movie
@@ -26,8 +28,20 @@ class StackRemoteViewsFactoryK(private val mContext: Context) :
     private lateinit var movieHelper: MovieHelper
 
     private fun getFavorite(onSucsess: () -> Unit, onEmpty: () -> Unit) {
+//        val handlerThread = HandlerThread("DataObserver")
+//        handlerThread.start()
+//        val handler = Handler(handlerThread.looper)
+//        val myObserver = object : ContentObserver(handler) {
+//            override fun onChange(self: Boolean) {
         movieHelper = MovieHelper.getInstance(mContext)
-        val cursor = movieHelper.queryAll()
+        val cursor = mContext.contentResolver?.query(
+            DatabaseContract.MovieColumns.CONTENT_URI_MOVIE,
+            null,
+            null,
+            null,
+            null
+        ) as Cursor
+//                val cursor = movieHelper.queryAll()
         val favorite = MappingHelper.mapCursorToArrayListMovie(cursor)
         if (favorite.size > 0) {
             listMovie.clear()
@@ -36,6 +50,9 @@ class StackRemoteViewsFactoryK(private val mContext: Context) :
         } else {
             onEmpty()
         }
+//            }
+//        }
+//        mContext.contentResolver.registerContentObserver(DatabaseContract.MovieColumns.CONTENT_URI_MOVIE, true, myObserver)
     }
 
     override fun onCreate() {

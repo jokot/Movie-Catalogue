@@ -9,8 +9,6 @@ object MappingHelper {
 
     fun mapCursorToArrayListMovie(moviesCursor: Cursor): ArrayList<Movie> {
         val moviesList = ArrayList<Movie>()
-        moviesCursor.moveToFirst()
-
         while (moviesCursor.moveToNext()) {
             val id =
                 moviesCursor.getInt(moviesCursor.getColumnIndexOrThrow(DatabaseContract.MovieColumns._ID))
@@ -63,7 +61,6 @@ object MappingHelper {
 
     fun mapCursorToArrayListTvShow(tvShowCursor: Cursor): ArrayList<TvShow> {
         val tvShowList = ArrayList<TvShow>()
-        tvShowCursor.moveToFirst()
         while (tvShowCursor.moveToNext()) {
             val id =
                 tvShowCursor.getInt(tvShowCursor.getColumnIndexOrThrow(DatabaseContract.TvShowColumns.Companion._ID))

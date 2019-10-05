@@ -149,12 +149,12 @@ class MainApp : Application() {
     }
 
     fun getReleaseToday(
-        date:String,
+        date: String,
         onResponse: (MutableList<Movie>) -> Unit,
         onError: (String) -> Unit
     ) {
-        val call = services.releasToday(API_KEY,date,date)
-        call.enqueue(object : Callback<MovieResponse>{
+        val call = services.releasToday(API_KEY, date, date)
+        call.enqueue(object : Callback<MovieResponse> {
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 logD(t.message.toString())
             }
@@ -239,7 +239,6 @@ class MainApp : Application() {
 
         })
     }
-
 
 
     fun putStringSharePref(key: String, value: String, context: Context) {

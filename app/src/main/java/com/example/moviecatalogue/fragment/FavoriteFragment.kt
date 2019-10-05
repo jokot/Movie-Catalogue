@@ -4,11 +4,9 @@ package com.example.moviecatalogue.fragment
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.moviecatalogue.MainApp
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.adapter.TabAdapter
 import kotlinx.android.synthetic.main.fragment_favorite.*
@@ -31,13 +29,8 @@ class FavoriteFragment : Fragment() {
         setUpTabLayout()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    private fun setUpTabLayout(){
-        val tabAdapter = TabAdapter(this.childFragmentManager,tabLayout.tabCount,requireContext())
+    private fun setUpTabLayout() {
+        val tabAdapter = TabAdapter(this.childFragmentManager, tabLayout.tabCount, requireContext())
         viewPager.adapter = tabAdapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.setupWithViewPager(viewPager)
